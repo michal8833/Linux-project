@@ -25,9 +25,18 @@ OPTION can be:<br/>
 `-t` - text file path<br/>
 `-d` - number of signal transmitting data<br/>
 `-c` - number of signal transmitting commands<br/><br/>
-Program receives signals(sent by monochord by specified Real-time signal number(`dataSignalNumber`)) and writes values, which are delivered with signals, to text file and binary file.
-The program is controlled by different Real-time signal(`commandsSignalNumber`). The commands concern: start or stop data registration, and request information on the current state of the program;
+Program receives signals(sent by monochord by specified Real-time signal number(`dataSignalNumber`)) and writes values, which are delivered with signals, to text file and binary file. Values are written with date and time, specfying when they arrived or only with time elapsed since time specified by reference point, when program is using reference point in that moment.
+The program is controlled by values sent to it with different Real-time signal(`commandsSignalNumber`).<br/>
+Meaning of received value:
+  * 0 : stop
+  * 1 : start
+    * +0 : do not use reference point
+    * +1 : set reference point to the present time and use it 
+    * +2 : use previous reference point
+    * +4 : write PID of process, which sent signal with data, to file
+    * +8 : truncate text and binary files
+  * 255 : send back information about current state of the program
 * info_rejestrator<br/>
 **Usage:**<br/>
-`./info_rejestrator -c <signal_number> <PID_number>`<br/><br/>
+`./info_rejestrator -c <commands_signal_number> <rejestrator_PID_number>`<br/><br/>
 Program is used to request information on the current state of the 'rejestrator' by sending proper command;
