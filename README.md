@@ -28,8 +28,8 @@ OPTION can be:<br/>
 Program receives signals(sent by monochord by specified Real-time signal number(`dataSignalNumber`)) and writes values, which are delivered with signals, to text file and binary file. Values are written with date and time, specfying when they arrived or, if the program is using reference point in that moment, only with time elapsed since time specified by reference point.
 The program is controlled by values sent to it with different Real-time signal(`commandsSignalNumber`).<br/>
 Meaning of received value:
-  * 0 : stop
-  * 1 : start
+  * 0 : stop writing data to files
+  * 1 : start writing data to files
     * +0 : do not use reference point
     * +1 : set reference point to the present time and use it 
     * +2 : use previous reference point
