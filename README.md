@@ -4,7 +4,7 @@ Final project for "Programowanie w systemie Linux" university course.
 
 ## Description
 
-Project consist of 3 programs:
+Project consist of 4 programs:
 * monochord<br/>
 **Usage:**<br/>
 `./monochord <UDP_port_number>`<br/><br/>
@@ -17,9 +17,9 @@ Furthermore, program receives messages with UDP socket. The message contains rec
   * `period` - sampling period[seconds]; special values: 0 - infinitity, <0 - sampling is stopped
   * `pid` - receiver's PID
   * `rt` - Real-time signal number
-* rejestrator<br/>
+* recorder<br/>
 **Usage:**<br/>
-`./rejestrator [OPTION] [VALUE]...`<br/>
+`./recorder [OPTION] [VALUE]...`<br/>
 OPTION can be:<br/>
 `-b`[optional] - binary file path<br/>
 `-t` - text file path<br/>
@@ -36,7 +36,7 @@ Meaning of received value:
     * +4 : write PID of process, which sent signal with data, to file
     * +8 : truncate text and binary files
   * 255 : send back information about current state of the program
-* info_rejestrator<br/>
+* info_recorder<br/>
 **Usage:**<br/>
-`./info_rejestrator -c <commands_signal_number> <rejestrator_PID_number>`<br/><br/>
-Program is used to request information on the current state of the 'rejestrator' by sending proper command.
+`./info_recorder <recorder_PID_number> <commands_signal_number> <command_value>`<br/><br/>
+Program is used to send command to 'recorder'.

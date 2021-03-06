@@ -20,7 +20,7 @@
 #include <arpa/inet.h>
 #include <math.h>
 
-void parseArgs(int argc, char **argv, int *signalNumber, int *pid);
+void parseArgs(int argc, char **argv, int *pid, int *signalNumber, int *value);
 void registerSignalHandler(int signalNumber);
 void decodeAndPrintReceivedInformation();
 
@@ -30,56 +30,55 @@ int main(int argc, char **argv) {
 
     int signalNumber;
     int pid;
+    int value;
     struct timespec twoSecondsWait = {.tv_sec = 2, .tv_nsec = 0};
     union sigval sv;
 
-    parseArgs(argc, argv, &signalNumber, &pid);
+    parseArgs(argc, argv,  &pid, &signalNumber, &value);
 
     registerSignalHandler(signalNumber);
 
-    sv.sival_int = 255;
+    sv.sival_int = value;
     sigqueue(pid, signalNumber, sv);
 
-    nanosleep(&twoSecondsWait, NULL);
+    if(value == 255) { // 'recorder' will send back information about current state of the program
+        nanosleep(&twoSecondsWait, NULL);
 
-    if(receivedValue != -1)
-        decodeAndPrintReceivedInformation();
-    else {
-        fprintf(stderr, "Odpowiedz nie nadeszla.\n");
-        exit(EXIT_FAILURE);
+        if(receivedValue != -1)
+            decodeAndPrintReceivedInformation();
+        else {
+            fprintf(stderr, "Odpowiedz nie nadeszla.\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     exit(EXIT_SUCCESS);
 }
 
 
-void parseArgs(int argc, char **argv, int *signalNumber, int *pid) {
-    int g;
+void parseArgs(int argc, char **argv, int *pid, int *signalNumber, int *value) {
+
     char *endptr;
 
-    *signalNumber = *pid = -1;
+    if(argc != 4) {
+        fprintf(stderr, "Niepoprawne argumenty.\n");
+        exit(EXIT_FAILURE);
+    }    
     
-    while ((g = getopt (argc, argv, "-c:")) != -1)
-        switch(g) {
-            case 'c':
-                errno = 0;
-                *signalNumber = strtol(optarg, &endptr, 0);
-                if( !((*optarg != '\0') && (*endptr == '\0')) || *signalNumber < SIGRTMIN || *signalNumber > SIGRTMAX ) {
-                    fprintf(stderr, "Niepoprawne argumenty.\n");
-                    exit(EXIT_FAILURE);
-                }
-                break;
+    *pid = strtol(argv[1], &endptr, 0);
+    if( !((*argv[1] != '\0') && (*endptr == '\0')) || *pid < 0 ) {
+        fprintf(stderr, "Niepoprawne argumenty.\n");
+        exit(EXIT_FAILURE);
+    }
 
-            default:
-                errno = 0;
-                *pid = strtol(argv[optind - 1], &endptr, 0);
-                if( !((*argv[optind - 1] != '\0') && (*endptr == '\0')) || *pid < 0 ) {
-                    fprintf(stderr, "Niepoprawne argumenty.\n");
-                    exit(EXIT_FAILURE);
-                }
-        }
+    *signalNumber = strtol(argv[2], &endptr, 0);
+    if( !((*argv[2] != '\0') && (*endptr == '\0')) || *signalNumber < SIGRTMIN || *signalNumber > SIGRTMAX ) {
+        fprintf(stderr, "Niepoprawne argumenty.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    if(*signalNumber == -1 || *pid == -1) {
+    *value = strtol(argv[3], &endptr, 0);
+    if( !((*argv[3] != '\0') && (*endptr == '\0')) ) {
         fprintf(stderr, "Niepoprawne argumenty.\n");
         exit(EXIT_FAILURE);
     }
