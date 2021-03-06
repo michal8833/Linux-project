@@ -10,7 +10,7 @@ Project consist of 4 programs:
 `./monochord <UDP_port_number>`<br/><br/>
 Program periodically sends Real-time signal with accompying value, which is value of sinus function.
 Furthermore, program receives messages with UDP socket. The message contains records terminated with `\n`. Information included in record is used to change program properties. Record should have format: `<parameter_name><spaces or tabs or char ':'><new_value_of_parameter>`. Record can also contain only one field that equals "raport". In this case program process other records in the message and then it sends back a new message containing information about current program properties.<br/>
-**NOTE:** Because of the default values, sampling is stopped at the beginning of the program. To start it, you have to properly set `period`, `pid` and `rt`.<br/>
+**NOTE:** Because of the default values, sampling is stopped at the beginning of the program. To start it, you have to properly set `period`, `pid` and `rt`.<br/><br/>
 `parameter_name` can be:
   * `amp` - sine amplitude
   * `freq` - sine frequency
@@ -62,17 +62,17 @@ After executing the above commands, content of "text" file in my case is:<br/>
 2021-03-66 00:10:31.510  0.188917  9062
 2021-03-66 00:10:32.510  -0.710339  9062
 2021-03-66 00:10:33.510  0.513651  9062
-.<br/>
-.<br/>
-.<br/>
-:00:25.928  -0.805691  9062
+.
+.
+.
+0:00:25.928  -0.805691  9062
 0:00:26.928  0.194331  9062
 0:00:27.928  0.478126  9062
 0:00:28.928  -3.998338  9062
 0:00:29.928  3.589485  9062
-.<br/>
-.<br/>
-.<br/>
+.
+.
+.
 ```
 
 
