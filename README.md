@@ -19,7 +19,7 @@ gcc info_recorder.c -o info_recorder
 
 ## Description
 
-Project consist of 4 programs:
+Project consist of 3 programs:
 * monochord<br/>
 **Usage:**<br/>
 `./monochord <UDP_port_number>`<br/><br/>
@@ -61,7 +61,7 @@ Program is used to send command to 'recorder'.<br/><br/>
 ```
 ./monochord 8888
 ./recorder -b "binary" -t "text" -d 34 -c 35
-ps -ax // to check pid of 'recorder' (in my case "9074")
+ps -ax // to check PID of 'recorder' (in my case "9074")
 
 // you can use 'nc' to send message to 'monochord'
 nc -u 127.0.0.1 8888 <<<"pid 9074" // change pid
