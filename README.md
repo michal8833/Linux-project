@@ -1,6 +1,13 @@
 # Linux-project
 
-Final project for "Programowanie w systemie Linux" university course.
+## Intro
+
+Final project for "Programowanie w systemie Linux" university course.<br/>
+In the project i used:
+* sockets,
+* Linux signals sending and handling,
+* POSIX timers,
+* File I/O
 
 ## Build
 
