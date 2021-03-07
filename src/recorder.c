@@ -229,14 +229,14 @@ void commandsSignal_handl(siginfo_t * info, sigset_t *blockMask, int dataSignalN
     int val;
     union sigval sv;
 
-    if(info->si_value.sival_int == 0) { // stop
+    if(info->si_value.sival_int == 0) { // zatrzymaj rejestrowanie sygnału z danymi
         registerParameters.stop = true;
 
         sigdelset(blockMask, dataSignalNumber); // usunięcie sygnału przesyłającego dane z maski spowoduje, że funkcja sigwaitinfo() nie będzie na niego czekać
         if(sigprocmask(SIG_SETMASK, blockMask, NULL) == -1) // odblokowanie sygnału przesyłającego dane spowoduje, że nie będą one kolejkowane w czasie, gdy program jest w stanie "stop"
             error("sigprocmask");
     }
-    else if(info->si_value.sival_int == 255) { // info
+    else if(info->si_value.sival_int == 255) { // odeślij informacje, dotyczące obecnego stanu programu
         val = 0;
 
         // ustawianie bitów zmiennej "val"
@@ -253,7 +253,7 @@ void commandsSignal_handl(siginfo_t * info, sigset_t *blockMask, int dataSignalN
         if(sigqueue(info->si_pid, info->si_signo, sv) == -1) // odesłanie do nadawcy tego samego sygnału, ale z wartością informująca o bieżącym statusie programu
             perror("sigqueue");
     }
-    else if(info->si_value.sival_int >= 1 && info->si_value.sival_int <= 16) { // start
+    else if(info->si_value.sival_int >= 1 && info->si_value.sival_int <= 16) { // rozpocznij rejestrowanie sygnału z danymi
         registerParameters.stop = false;
         
         registerParameters.identifySource = false;
@@ -267,22 +267,22 @@ void commandsSignal_handl(siginfo_t * info, sigset_t *blockMask, int dataSignalN
         if((info->si_value.sival_int & 2) != 0 && (info->si_value.sival_int & 1) != 0) // wartości +1 i +2 nie mogą wystąpić jednocześnie
             return;
             
-        if((info->si_value.sival_int & 2) != 0) { // poprzedni punkt referencyjny
+        if((info->si_value.sival_int & 2) != 0) { // używaj poprzedniego punktu referencyjnego
             registerParameters.globalTimestamp = false;
             if(referencePoint.tv_sec == 0) // jeśli jeszcze żaden punkt referencyjny nie był określony
                 if(clock_gettime(CLOCK_MONOTONIC, &referencePoint) == -1)
                     perror("clock_gettime");
         }
-        else if((info->si_value.sival_int & 1) != 0) { // nowy punkt referencyjny
+        else if((info->si_value.sival_int & 1) != 0) { // ustaw punkt referencyjny na czas obecny i używaj go
             registerParameters.globalTimestamp = false;
             if(clock_gettime(CLOCK_MONOTONIC, &referencePoint) == -1)
                 perror("clock_gettime");
         }
-        else { // bez punktu referencyjnego
+        else { // nie używaj punktu referencyjnego
             registerParameters.globalTimestamp = true;
         }
 
-        if((info->si_value.sival_int & 4) != 0) { // użycie identyfikacji źródeł
+        if((info->si_value.sival_int & 4) != 0) { // zapisuj do plików PID procesu, który wysłał sygnał z danymi
             registerParameters.identifySource = true;
         }
 
