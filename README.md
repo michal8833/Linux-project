@@ -2,6 +2,21 @@
 
 Final project for "Programowanie w systemie Linux" university course.
 
+## Build
+
+```
+mkdir build && cd build
+cmake ..
+make
+```
+or
+```
+// go to 'src' directory
+gcc monochord.c -o monochord -lm -lrt
+gcc recorder.c -o recorder
+gcc info_recorder.c -o info_recorder
+```
+
 ## Description
 
 Project consist of 4 programs:
@@ -58,10 +73,10 @@ nc -u 127.0.0.1 8888 <<<"amp 4" // change sine amplitude to 4
 ```
 After executing the above commands, content of "text" file in my case is:<br/>
 ```
-2021-03-66 00:10:30.510  -0.807507  9062
-2021-03-66 00:10:31.510  0.188917  9062
-2021-03-66 00:10:32.510  -0.710339  9062
-2021-03-66 00:10:33.510  0.513651  9062
+2021-03-06 00:10:30.510  -0.807507  9062
+2021-03-06 00:10:31.510  0.188917  9062
+2021-03-06 00:10:32.510  -0.710339  9062
+2021-03-06 00:10:33.510  0.513651  9062
 .
 .
 .
