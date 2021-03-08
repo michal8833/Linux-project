@@ -2,7 +2,7 @@
 
 ## Intro
 
-Final project for "Programowanie w systemie Linux" university course.<br/>
+Final project for "Programming in Linux OS" university course.<br/>
 In the project I used:
 * sockets,
 * Linux signals sending and handling,
